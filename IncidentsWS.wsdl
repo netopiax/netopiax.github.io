@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="urn:IncidentsWS" xmlns:s0="urn:IncidentsWS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ <wsdl:types>
+  <xsd:schema elementFormDefault="qualified" targetNamespace="urn:IncidentsWS">
+   <xsd:element name="ListOfIncidents" type="s0:InputMapping1"/>
+   <xsd:complexType name="InputMapping1">
+    <xsd:sequence>
+     <xsd:element maxOccurs="1" minOccurs="1" name="Start_Date" nillable="false" type="xsd:dateTime"/>
+     <xsd:element maxOccurs="1" minOccurs="1" name="End_Date" nillable="false" type="xsd:dateTime"/>
+     <xsd:element maxOccurs="1" minOccurs="1" name="Incident_Type" nillable="false" type="xsd:string"/>
+     <xsd:element maxOccurs="1" minOccurs="1" name="Status" nillable="false" type="xsd:string"/>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:element name="ListOfIncidentsResponse" type="s0:OutputMapping1"/>
+   <xsd:complexType name="OutputMapping1">
+    <xsd:sequence>
+     <xsd:element maxOccurs="unbounded" minOccurs="1" name="IncidentList">
+      <xsd:complexType>
+       <xsd:sequence>
+        <xsd:element maxOccurs="1" minOccurs="1" name="IBX" nillable="false" type="xsd:string"/>
+        <xsd:element maxOccurs="1" minOccurs="1" name="Internal_Summary" nillable="false" type="xsd:string"/>
+        <xsd:element maxOccurs="1" minOccurs="0" name="Ticket_Number" nillable="false" type="xsd:string"/>
+        <xsd:element maxOccurs="1" minOccurs="1" name="Status" nillable="false" type="s0:StatusType"/>
+        <xsd:element maxOccurs="1" minOccurs="1" name="Occured_At" nillable="true" type="xsd:dateTime"/>
+       </xsd:sequence>
+      </xsd:complexType>
+     </xsd:element>
+    </xsd:sequence>
+   </xsd:complexType>
+   <xsd:simpleType name="StatusType">
+    <xsd:restriction base="xsd:string">
+     <xsd:enumeration value="New"/>
+     <xsd:enumeration value="No Update"/>
+     <xsd:enumeration value="Updated"/>
+     <xsd:enumeration value="Resolved"/>
+     <xsd:enumeration value="Closed"/>
+     <xsd:enumeration value="IIR Completed"/>
+     <xsd:enumeration value="Cancelled"/>
+    </xsd:restriction>
+   </xsd:simpleType>
+   <xsd:element name="AuthenticationInfo" type="s0:AuthenticationInfo"/>
+   <xsd:complexType name="AuthenticationInfo">
+    <xsd:sequence>
+     <xsd:element name="userName" type="xsd:string"/>
+     <xsd:element name="password" type="xsd:string"/>
+     <xsd:element minOccurs="0" name="authentication" type="xsd:string"/>
+     <xsd:element minOccurs="0" name="locale" type="xsd:string"/>
+     <xsd:element minOccurs="0" name="timeZone" type="xsd:string"/>
+    </xsd:sequence>
+   </xsd:complexType>
+  </xsd:schema>
+ </wsdl:types>
+
+   <wsdl:message name="ListOfIncidentsSoapOut">
+
+      <wsdl:part element="s0:ListOfIncidentsResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="ListOfIncidentsSoapIn">
+
+      <wsdl:part element="s0:ListOfIncidents" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="ARAuthenticate">
+
+      <wsdl:part element="s0:AuthenticationInfo" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="IncidentPortType">
+
+      <wsdl:operation name="ListOfIncidents">
+
+         <wsdl:input message="s0:ListOfIncidentsSoapIn">
+
+       </wsdl:input>
+
+         <wsdl:output message="s0:ListOfIncidentsSoapOut">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="IncidentSoapBinding" type="s0:IncidentPortType">
+
+      <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="ListOfIncidents">
+
+         <soap:operation soapAction="urn:IncidentsWS/ListOfIncidents" style="document"/>
+
+         <wsdl:input>
+
+            <soap:header message="s0:ARAuthenticate" part="parameters" use="literal">
+
+            </soap:header>
+
+            <soap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output>
+
+            <soap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="IncidentsWSService">
+
+      <wsdl:port binding="s0:IncidentSoapBinding" name="IncidentSoap">
+
+         <soap:address location="http://uatremedyweb.corp.equinix.com/arsys/services/ARService?server=uatremedyapp&amp;webService=IncidentsWS"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
+
